@@ -1,48 +1,83 @@
-#include <SoftwareSerial.h>
-#include <AFMotor.h>
+const int IN1 =3;
+const int IN2 =4;
+const int IN3 =5;
+const int IN4 =6;
 
-AF_DCMotor motor1(1);
-AF_DCMotor motor2(2);
+const int ENA =2;
+const int ENB =7;
 
-void setup() {
+void setup () {
+    
+    pinMode(9,INPUT);
+    pinMode(10,INPUT);
+    
+    pinMode( IN1 ,OUTPUT);
+    pinMode( IN2 ,OUTPUT);
+    pinMode( IN3 ,OUTPUT);
+    pinMode( IN4 ,OUTPUT);
+}
 
-pinMode(52,INPUT);
-pinMode(53,INPUT);
+void FORWARD() {
+    digitalWrite(IN1, HIGH);
+    digitalWrite(IN2, LOW);
+    digitalWrite(IN3, HIGH);
+    digitalWrite(IN4, LOW);
+}
 
+void BACKWARD() {
+    digitalWrite(IN1, LOW);
+    digitalWrite(IN2, HIGH);
+    digitalWrite(IN3, LOW);
+    digitalWrite(IN4, HIGH);
+}
+
+void LEFT() {
+    digitalWrite(IN1, LOW);
+    digitalWrite(IN2, LOW);
+    digitalWrite(IN3, HIGH);
+    digitalWrite(IN4, LOW);
+}
+
+void RIGHT() {
+    digitalWrite(IN1, HIGH);
+    digitalWrite(IN2, LOW);
+    digitalWrite(IN3, LOW);
+    digitalWrite(IN4, LOW);
+}
+
+void STOP() {
+    digitalWrite(IN1, LOW);
+    digitalWrite(IN2, LOW);
+    digitalWrite(IN3, LOW);
+    digitalWrite(IN4, LOW);
 }
 
 void loop() {
-
-int lsensor=digitalRead(52);
-int rsensor=digitalRead(53);
-
-if((lsensor==HIGH)&&(rsensor==HIGH))
-{
-  motor1.setSpeed(110);
-  motor2.setSpeed(110);
-
-  motor1.run(FORWARD);
-  motor2.run(FORWARD);
-} else if ((lsensor==HIGH)&&(rsensor==LOW))
-{
-  motor1.setSpeed(100);
-  motor2.setSpeed(90);
-
-  motor1.run(FORWARD);
-  motor2.run(FORWARD);
-} else if ((lsensor==LOW)&&(rsensor==HIGH))
-{
-  motor1.setSpeed(90);
-  motor2.setSpeed(100);
-
-  motor1.run(FORWARD);
-  motor2.run(FORWARD);
-} else 
-{
-  motor1.setSpeed(0);
-  motor2.setSpeed(0);
-
-  motor1.run(RELEASE);
-  motor2.run(RELEASE);
-}
+    int lsensor=digitalRead(9);
+    int rsensor=digitalRead(8);
+    
+    if((lsensor==HIGH) && (rsensor==HIGH))
+    {
+        analogWrite(ENA, 120);
+        analogWrite(ENB, 120);
+        FORWARD();
+    }
+    
+    if((lsensor==HIGH) && (rsensor==LOW))
+    {
+        analogWrite(ENA, 110);
+        analogWrite(ENB, 100);
+        RIGHT();
+    }
+    
+    if((lsensor==LOW) && (rsensor==HIGH))
+    {
+        analogWrite(ENA, 100);
+        analogWrite(ENB, 110);
+        LEFT();
+    }
+    else
+    {
+        STOP();
+    }
 }
